@@ -1,0 +1,97 @@
+#!/bin/sh
+
+# Package
+PACKAGE="nomad"
+DNAME="nomad"
+
+INSTALL_DIR="/usr/local/${PACKAGE}"
+SSS="/var/packages/${DNAME}/scripts/start-stop-status"
+PATH="${INSTALL_DIR}:${PATH}"
+
+SERVICETOOL="/usr/syno/bin/servicetool"
+FWPORTS="/var/packages/${DNAME}/scripts/${PACKAGE}.sc"
+
+FILE_CREATE_LOG="${INSTALL_DIR}/nomad/wizard_create_log"
+LOG_FILE="/var/log/nomad.log"
+
+CONF_DIR="${INSTALL_DIR}/nomad/conf.d"
+
+BACKUP_DIR="/tmp/nomad_backup"
+
+LABEL_DIR="${CONF_DIR}/label"
+LICENSE_DIR="${CONF_DIR}/license"
+GITIGNORE_DIR="${CONF_DIR}/gitignore"
+README_DIR="${CONF_DIR}/readme"
+
+preinst ()
+{
+    cp -r "${CONF_DIR}" "${BACKUP_DIR}"
+    exit 0
+}
+
+postinst ()
+{
+    # Link
+    ln -s ${SYNOPKG_PKGDEST} ${INSTALL_DIR}
+    ln -s "${INSTALL_DIR}/${PACKAGE}/${DNAME}" "/usr/local/bin/${DNAME}"
+
+    # to create log at each start 
+    if [ "${wizard_create_log}" == "true" ]; then
+        touch ${FILE_CREATE_LOG}
+    fi
+
+    # Add firewall config
+    ${SERVICETOOL} --install-configure-file --package ${FWPORTS} >> /dev/null
+
+    mkdir -p "${CONF_DIR}"
+
+    exit 0
+}
+
+preuninst ()
+{
+    # Stop the package
+    ${SSS} stop > /dev/null
+
+    # Remove firewall config
+    if [ "${SYNOPKG_PKG_STATUS}" == "UNINSTALL" ]; then
+        ${SERVICETOOL} --remove-configure-file --package ${PACKAGE}.sc >> /dev/null
+    fi
+
+    exit 0
+}
+
+postuninst ()
+{
+    # Remove link
+    rm -f ${INSTALL_DIR}
+    rm -f "/usr/local/bin/${DNAME}"
+
+    # remove log file
+    rm -f ${LOG_FILE}
+
+    rm -R "${BACKUP_DIR}"
+    exit 0
+}
+
+preupgrade ()
+{
+    # Stop the package
+    ${SSS} stop > /dev/null
+
+    if [[ ! -d "${BACKUP_DIR}" ]]; then
+        mkdir "${BACKUP_DIR}"
+    fi
+
+    #Label
+    if [[ -d "${LABEL_DIR}" ]]; then
+        cp -R "${LABEL_DIR}" "${BACKUP_DIR}"
+    fi
+      
+    exit 0
+}
+
+postupgrade ()
+{
+    exit 0
+}

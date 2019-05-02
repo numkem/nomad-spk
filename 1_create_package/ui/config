@@ -1,0 +1,15 @@
+{
+    ".url": {
+        "com.hashicorp.nomad": {
+            "type": "url",
+            "allUsers": true,
+            "title": "nomad",
+            "desc": "Easily Deploy Applications at Any Scale",
+            "icon": "nomad-{0}.png",
+            "protocol": "http",
+            "url": "/",
+            "port": "4646", 
+            "grantPrivilege": "local"
+        }
+    }
+}
