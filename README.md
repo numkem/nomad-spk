@@ -8,7 +8,7 @@ Install nomad into a Synology NAS.
 
 ## Requirements
 
-Only tested on x64 (DS916+) could work on ARM since there an available nomad binary.
+Only tested on x64 (DS916+) could work on ARM since a nomad binary exists.
 
 ## Usage
 
