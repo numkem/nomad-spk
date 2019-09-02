@@ -1,5 +1,5 @@
 package="nomad"
-version="0.9.3"
+version="0.9.5"
 description="Easily Deploy Applications at Any Scale"
 support_url="https://github.com/hashicorp/nomad/"
 displayname="nomad"
