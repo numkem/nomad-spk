@@ -19,7 +19,8 @@ if [ -d "${ALT_CONF_DIR}" ];
 then
     CONF_DIR="${ALT_CONF_DIR}"
 fi
-ARGS="agent -config=${CONF_DIR}"
+CONF_DIR="/volume1/@appstore/nomad/nomad/conf.d/server.conf"
+ARGS="agent -config ${CONF_DIR}"
 
 export HOME=${DIR_NOMAD}
 export USER=root
@@ -28,7 +29,8 @@ export USERNAME=root
 
 start_daemon ()
 {
-    echo "Using configuration file in ${CONFIG_DIR}" >> $LOG_FILE
+    echo "Using configuration file in ${CONF_DIR}" >> $LOG_FILE
+    echo "Using args ${ARGS}" >> $LOG_FILE
     ${NOMAD} $ARGS >> ${LOG_FILE} 2>&1 &
     echo $! > ${PID_FILE}
 }
