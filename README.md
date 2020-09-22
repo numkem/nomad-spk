@@ -19,6 +19,8 @@ Finally, install with nomad web installation.
 
 You can store your configuration using a `conf.d` folder inside `1_create_package/nomad/`. If you don't want to ship your configurations with the package, you can use `/etc/nomad`.
 
+**Please update or remove the configuration as it exists in this repository**
+
 ## To use with another arch
 
 Download the binary from https://www.nomadproject.io/downloads.html, replace the content from **1_create_package/nomad** directory and exec create_spk.sh:
